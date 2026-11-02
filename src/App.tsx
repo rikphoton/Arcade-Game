@@ -19,6 +19,8 @@ import { BossRushModal } from './components/BossRushModal';
 import { GauntletModal } from './components/GauntletModal';
 import { HighScoresModal } from './components/HighScoresModal';
 import { DailyBountyModal } from './components/DailyBountyModal';
+import { InstallModal } from './components/InstallModal';
+import { OfflineIndicator } from './components/OfflineIndicator';
 import { Play, Grid, Box, Sparkles, Trophy, Flame, Skull, Shield, Target } from 'lucide-react';
 
 export default function App() {
@@ -34,6 +36,7 @@ export default function App() {
   const [gauntletOpen, setGauntletOpen] = useState(false);
   const [highScoresOpen, setHighScoresOpen] = useState(false);
   const [bountyModalOpen, setBountyModalOpen] = useState(false);
+  const [installModalOpen, setInstallModalOpen] = useState(false);
 
   // Gauntlet / Special modes
   const [isGauntletActive, setIsGauntletActive] = useState(false);
@@ -89,6 +92,7 @@ export default function App() {
         onOpenHighScores={() => setHighScoresOpen(true)}
         onOpenBossRush={() => setBossRushOpen(true)}
         onOpenGauntlet={() => setGauntletOpen(true)}
+        onOpenInstallModal={() => setInstallModalOpen(true)}
         onToggleCrt={handleToggleCrt}
       />
 
@@ -281,6 +285,13 @@ export default function App() {
         onClose={() => setHighScoresOpen(false)}
         profile={profile}
       />
+
+      <InstallModal
+        isOpen={installModalOpen}
+        onClose={() => setInstallModalOpen(false)}
+      />
+
+      <OfflineIndicator />
     </div>
   );
 }

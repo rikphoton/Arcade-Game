@@ -106,6 +106,41 @@ Every day at **00:00 UTC**, a fresh set of deterministic, seeded daily bounties 
 
 ---
 
+## 📱 Play in Any Mode: PWA, Android APK & GitHub Pages
+
+Neon Pulse Arcade is engineered to run seamlessly across all platforms and environments:
+
+### 1. 🌐 GitHub Pages Web Version (Instant Browser Play)
+Play directly in any desktop or mobile browser without installing anything!
+- **Automated Deployment**: The repository includes `.github/workflows/deploy.yml` which automatically builds and deploys the app to GitHub Pages on every push.
+- **Enable GitHub Pages**:
+  1. In your GitHub repository, go to **Settings** → **Pages**.
+  2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+  3. Your game will be live at:
+     ```
+     https://<your-username>.github.io/Fun-Game/
+     ```
+
+### 2. 📲 Progressive Web App (PWA Standalone Mode)
+- **One-Click Installation**: Tap the **Install / APK** button in the top navigation bar or the browser URL bar to install the arcade directly onto your device.
+- **Home Screen & Launcher**: Launches with standalone display mode (no browser address bar), custom splash screen, and high-res cyberpunk app icon.
+- **Offline Capability**: Pre-caches all scripts, styles, and audio with automatic service worker background updates.
+- **iOS Safari Support**: Tap **Share** in Safari → **Add to Home Screen**.
+
+### 3. 🤖 Android APK Package (Native App Mode)
+- **Automated CI/CD Workflow**: The repository includes `.github/workflows/build-apk.yml`. Every commit builds the Android app package and uploads the build artifact under GitHub Actions.
+- **Local APK Build**:
+  ```bash
+  # Build web assets and package via Bubblewrap CLI
+  npm run build:apk
+  ```
+- **Instant Cloud Build via PWABuilder**:
+  1. Visit [PWABuilder.com](https://www.pwabuilder.com/).
+  2. Paste your live GitHub Pages URL (`https://<username>.github.io/Fun-Game/`).
+  3. Click **Package for Android** to download a production-ready signed `.apk` or `.aab` file for sideloading or Google Play Store distribution!
+
+---
+
 ## 🚀 Getting Started & How to Run
 
 ### Prerequisites

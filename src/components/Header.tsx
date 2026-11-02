@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlayerProfile } from '../types/game';
-import { Monitor, Cpu, Trophy, Sparkles, Skull, Flame, Target } from 'lucide-react';
+import { Monitor, Cpu, Trophy, Sparkles, Skull, Flame, Target, Download } from 'lucide-react';
 
 interface HeaderProps {
   profile: PlayerProfile;
@@ -10,6 +10,7 @@ interface HeaderProps {
   onOpenHighScores: () => void;
   onOpenBossRush: () => void;
   onOpenGauntlet: () => void;
+  onOpenInstallModal: () => void;
   onToggleCrt: () => void;
 }
 
@@ -21,6 +22,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHighScores,
   onOpenBossRush,
   onOpenGauntlet,
+  onOpenInstallModal,
   onToggleCrt,
 }) => {
   const claimableCount =
@@ -83,8 +85,17 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
       </nav>
 
-      {/* Zone 3: 1 primary action with NC balance and CRT toggle */}
+      {/* Zone 3: Actions with Install, CRT, and NC balance */}
       <div className="flex items-center gap-3 shrink-0">
+        <button
+          onClick={onOpenInstallModal}
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-cyan-300 bg-cyan-950/60 hover:bg-cyan-900/80 border border-cyan-500/40 rounded-lg transition-colors whitespace-nowrap"
+          title="Install App, Download APK, or Play on GitHub"
+        >
+          <Download className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Install / APK</span>
+        </button>
+
         <button
           onClick={onToggleCrt}
           className={`p-2 rounded-lg border text-xs font-mono transition-colors flex items-center gap-1.5 ${

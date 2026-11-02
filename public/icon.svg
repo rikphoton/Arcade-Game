@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <rect width="512" height="512" rx="128" fill="#060913"/>
+  <circle cx="256" cy="256" r="220" stroke="#06b6d4" stroke-width="14" stroke-opacity="0.8"/>
+  <circle cx="256" cy="256" r="210" stroke="#ec4899" stroke-width="4" stroke-opacity="0.6"/>
+  
+  <!-- Arcade Joystick Base -->
+  <ellipse cx="210" cy="340" rx="90" ry="45" fill="#1e293b" stroke="#334155" stroke-width="8"/>
+  
+  <!-- Joystick Shaft -->
+  <line x1="210" y1="330" x2="210" y2="190" stroke="#f1f5f9" stroke-width="26" stroke-linecap="round"/>
+  
+  <!-- Ball Top -->
+  <circle cx="210" cy="180" r="55" fill="#ec4899"/>
+  <circle cx="195" cy="165" r="16" fill="#ffffff" fill-opacity="0.6"/>
+  
+  <!-- Arcade Buttons -->
+  <circle cx="350" cy="260" r="26" fill="#06b6d4" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="390" cy="320" r="26" fill="#f59e0b" stroke="#ffffff" stroke-width="4"/>
+  <circle cx="330" cy="360" r="26" fill="#10b981" stroke="#ffffff" stroke-width="4"/>
+</svg>
