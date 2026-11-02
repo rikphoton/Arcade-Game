@@ -112,6 +112,7 @@ export interface PlayerProfile {
     maxStagesCleared: number;
     bestComboStreak: number;
   };
+  dailyBounties?: DailyBountyState;
 }
 
 export interface BossRushMutators {
@@ -119,3 +120,25 @@ export interface BossRushMutators {
   bulletHell: boolean;
   glassCannon: boolean;
 }
+
+export type BountyCategory = 'score' | 'emp' | 'combo' | 'stages' | 'games_played';
+
+export interface DailyBounty {
+  id: string;
+  gameId?: GameId;
+  title: string;
+  description: string;
+  target: number;
+  current: number;
+  rewardCredits: number;
+  isCompleted: boolean;
+  isClaimed: boolean;
+  unit: string;
+}
+
+export interface DailyBountyState {
+  date: string; // YYYY-MM-DD
+  bounties: DailyBounty[];
+  claimedAllBonus: boolean;
+}
+

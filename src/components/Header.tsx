@@ -1,11 +1,12 @@
 import React from 'react';
 import { PlayerProfile } from '../types/game';
-import { Monitor, Cpu, Trophy, Sparkles, Skull, Flame } from 'lucide-react';
+import { Monitor, Cpu, Trophy, Sparkles, Skull, Flame, Target } from 'lucide-react';
 
 interface HeaderProps {
   profile: PlayerProfile;
   onOpenCyberLab: () => void;
   onOpenArmory: () => void;
+  onOpenDailyBounties: () => void;
   onOpenHighScores: () => void;
   onOpenBossRush: () => void;
   onOpenGauntlet: () => void;
@@ -16,11 +17,14 @@ export const Header: React.FC<HeaderProps> = ({
   profile,
   onOpenCyberLab,
   onOpenArmory,
+  onOpenDailyBounties,
   onOpenHighScores,
   onOpenBossRush,
   onOpenGauntlet,
   onToggleCrt,
 }) => {
+  const claimableCount =
+    profile.dailyBounties?.bounties.filter((b) => b.isCompleted && !b.isClaimed).length || 0;
   return (
     <header className="flex items-center justify-between gap-8 px-6 py-4 border-b border-slate-800 bg-slate-950/90 backdrop-blur-md sticky top-0 z-40">
       {/* Zone 1: Single text element brand wordmark */}
@@ -36,6 +40,18 @@ export const Header: React.FC<HeaderProps> = ({
         >
           <Cpu className="w-3.5 h-3.5 text-cyan-400" />
           <span>Cyber Lab</span>
+        </button>
+        <button
+          onClick={onOpenDailyBounties}
+          className="hover:text-cyan-400 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 relative"
+        >
+          <Target className="w-3.5 h-3.5 text-cyan-400" />
+          <span>Daily Bounties</span>
+          {claimableCount > 0 && (
+            <span className="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 font-bold font-mono text-[9px] flex items-center justify-center animate-pulse">
+              {claimableCount}
+            </span>
+          )}
         </button>
         <button
           onClick={onOpenArmory}

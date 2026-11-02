@@ -7,6 +7,7 @@ import React, { useState, useEffect } from 'react';
 import { GameId, PlayerProfile } from './types/game';
 import { ARCADE_GAMES } from './games/registry';
 import { loadProfile, saveProfile } from './services/storage';
+import { syncDailyBounties } from './services/bountyService';
 import { sound } from './services/sound';
 import { Header } from './components/Header';
 import { Arcade3DHall } from './components/Arcade3DHall';
@@ -17,10 +18,11 @@ import { CabinetArmoryModal } from './components/CabinetArmoryModal';
 import { BossRushModal } from './components/BossRushModal';
 import { GauntletModal } from './components/GauntletModal';
 import { HighScoresModal } from './components/HighScoresModal';
-import { Play, Grid, Box, Sparkles, Trophy, Flame, Skull, Shield } from 'lucide-react';
+import { DailyBountyModal } from './components/DailyBountyModal';
+import { Play, Grid, Box, Sparkles, Trophy, Flame, Skull, Shield, Target } from 'lucide-react';
 
 export default function App() {
-  const [profile, setProfile] = useState<PlayerProfile>(loadProfile);
+  const [profile, setProfile] = useState<PlayerProfile>(() => syncDailyBounties(loadProfile()));
   const [currentView, setCurrentView] = useState<'HUB' | 'PLAYING'>('HUB');
   const [hubMode, setHubMode] = useState<'3D' | '2D'>('3D');
   const [selectedGameId, setSelectedGameId] = useState<GameId>('cyber-survivors');
@@ -31,6 +33,7 @@ export default function App() {
   const [bossRushOpen, setBossRushOpen] = useState(false);
   const [gauntletOpen, setGauntletOpen] = useState(false);
   const [highScoresOpen, setHighScoresOpen] = useState(false);
+  const [bountyModalOpen, setBountyModalOpen] = useState(false);
 
   // Gauntlet / Special modes
   const [isGauntletActive, setIsGauntletActive] = useState(false);
@@ -82,6 +85,7 @@ export default function App() {
         profile={profile}
         onOpenCyberLab={() => setCyberLabOpen(true)}
         onOpenArmory={() => setArmoryOpen(true)}
+        onOpenDailyBounties={() => setBountyModalOpen(true)}
         onOpenHighScores={() => setHighScoresOpen(true)}
         onOpenBossRush={() => setBossRushOpen(true)}
         onOpenGauntlet={() => setGauntletOpen(true)}
@@ -149,7 +153,25 @@ export default function App() {
             )}
 
             {/* Quick Challenge Strips */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+              <div
+                onClick={() => setBountyModalOpen(true)}
+                className="p-4 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-cyan-500/20 hover:border-cyan-500/40 cursor-pointer transition-all flex items-center justify-between group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                    <Target className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">
+                      Daily Bounties
+                    </h3>
+                    <p className="text-xs text-slate-400">Earn up to 1,250 NC every day</p>
+                  </div>
+                </div>
+                <span className="text-xs font-mono font-bold text-cyan-400">VIEW →</span>
+              </div>
+
               <div
                 onClick={() => setBossRushOpen(true)}
                 className="p-4 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-rose-500/20 hover:border-rose-500/40 cursor-pointer transition-all flex items-center justify-between group"
@@ -162,7 +184,7 @@ export default function App() {
                     <h3 className="text-sm font-bold text-white group-hover:text-rose-400 transition-colors">
                       Boss Rush Arena
                     </h3>
-                    <p className="text-xs text-slate-400">Challenge elite dreadnought commanders</p>
+                    <p className="text-xs text-slate-400">Challenge elite dreadnoughts</p>
                   </div>
                 </div>
                 <span className="text-xs font-mono font-bold text-rose-400">ENTER →</span>
@@ -180,7 +202,7 @@ export default function App() {
                     <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors">
                       Endless Gauntlet
                     </h3>
-                    <p className="text-xs text-slate-400">Survive rapid multi-game transitions</p>
+                    <p className="text-xs text-slate-400">Multi-game streak survival</p>
                   </div>
                 </div>
                 <span className="text-xs font-mono font-bold text-amber-400">PLAY →</span>
@@ -188,20 +210,20 @@ export default function App() {
 
               <div
                 onClick={() => setCyberLabOpen(true)}
-                className="p-4 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-cyan-500/20 hover:border-cyan-500/40 cursor-pointer transition-all flex items-center justify-between group"
+                className="p-4 rounded-xl bg-slate-900/60 hover:bg-slate-800/80 border border-purple-500/20 hover:border-purple-500/40 cursor-pointer transition-all flex items-center justify-between group"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-400">
                     <Shield className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition-colors">
+                    <h3 className="text-sm font-bold text-white group-hover:text-purple-400 transition-colors">
                       Cyber Lab Tech
                     </h3>
-                    <p className="text-xs text-slate-400">Upgrade shields, thrusters & capacitors</p>
+                    <p className="text-xs text-slate-400">Permanent system upgrades</p>
                   </div>
                 </div>
-                <span className="text-xs font-mono font-bold text-cyan-400">UPGRADE →</span>
+                <span className="text-xs font-mono font-bold text-purple-400">UPGRADE →</span>
               </div>
             </div>
           </>
@@ -231,6 +253,14 @@ export default function App() {
         onClose={() => setArmoryOpen(false)}
         profile={profile}
         onUpdateProfile={handleUpdateProfile}
+      />
+
+      <DailyBountyModal
+        isOpen={bountyModalOpen}
+        onClose={() => setBountyModalOpen(false)}
+        profile={profile}
+        onUpdateProfile={handleUpdateProfile}
+        onLaunchGame={handleLaunchGame}
       />
 
       <BossRushModal

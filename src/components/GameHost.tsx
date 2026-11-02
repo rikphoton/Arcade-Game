@@ -3,8 +3,9 @@ import { ArcadeGameInstance, GameId, GameRuntimeState, InputState, PlayerProfile
 import { ARCADE_GAMES } from '../games/registry';
 import { createGameInstance } from '../games/factory';
 import { sound } from '../services/sound';
+import { processGameEventForBounties } from '../services/bountyService';
 import { VirtualTouchDeck } from './VirtualTouchDeck';
-import { Pause, Play, RotateCcw, Home, Volume2, VolumeX, Shield, Heart, Zap, Award } from 'lucide-react';
+import { Pause, Play, RotateCcw, Home, Volume2, VolumeX, Shield, Heart, Zap, Award, Target } from 'lucide-react';
 
 interface GameHostProps {
   gameId: GameId;
@@ -24,6 +25,7 @@ export const GameHost: React.FC<GameHostProps> = ({
   const gameRef = useRef<ArcadeGameInstance | null>(null);
 
   const [isPaused, setIsPaused] = useState(false);
+  const [bountyToast, setBountyToast] = useState<string | null>(null);
   const [hudState, setHudState] = useState<GameRuntimeState>({
     score: 0,
     highScore: 0,
@@ -88,6 +90,36 @@ export const GameHost: React.FC<GameHostProps> = ({
 
         // Clear one-shot canvas click
         inputStateRef.current.canvasClick = null;
+
+        // Check Daily Bounties periodically
+        if (profile.dailyBounties && (state.score > 0 || state.isGameOver)) {
+          const { updatedBounties, newlyCompletedBounties } = processGameEventForBounties(
+            profile.dailyBounties.bounties,
+            {
+              gameId,
+              score: state.score,
+              combo: state.multiplier,
+              stage: state.level,
+              gameCompleted: state.isGameOver,
+            }
+          );
+
+          if (newlyCompletedBounties.length > 0) {
+            sound.playPowerup();
+            setBountyToast(newlyCompletedBounties[0].title);
+            setTimeout(() => setBountyToast(null), 3500);
+
+            onUpdateProfile((prev) => ({
+              ...prev,
+              dailyBounties: prev.dailyBounties
+                ? {
+                    ...prev.dailyBounties,
+                    bounties: updatedBounties,
+                  }
+                : undefined,
+            }));
+          }
+        }
 
         if (state.isGameOver) {
           // Commit score and credits to profile once
@@ -268,6 +300,16 @@ export const GameHost: React.FC<GameHostProps> = ({
 
       {/* Game Canvas Container with Optional CRT Screen Overlay */}
       <div className={`relative w-full flex justify-center bg-slate-950 ${profile.crtFilterEnabled ? 'crt-screen crt-vignette' : ''}`}>
+        {/* Bounty Complete Toast Notification */}
+        {bountyToast && (
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-emerald-950/95 border border-emerald-500/80 text-emerald-300 px-4 py-2 rounded-xl shadow-2xl flex items-center gap-2.5 z-30 animate-in fade-in slide-in-from-top-3 duration-200">
+            <Target className="w-4 h-4 text-emerald-400 animate-spin" />
+            <span className="text-xs font-bold font-mono tracking-wide">
+              BOUNTY COMPLETED: {bountyToast} · REWARD READY!
+            </span>
+          </div>
+        )}
+
         <canvas
           ref={canvasRef}
           onClick={handleCanvasClick}
